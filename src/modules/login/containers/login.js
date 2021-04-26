@@ -20,7 +20,7 @@ class Login extends Component {
     let response = await apiConsumer.isUser(this.state.username, this.state.password)
     console.log("-->",response)
     if (response.success) {
-      this.props.navigation.navigate('Principal')
+      this.props.navigation.navigate('Principal', {user: this.state.username})
     } else {
       Alert.alert("Usuario incorrecto")
     }

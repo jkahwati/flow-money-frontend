@@ -3,7 +3,7 @@ import  {View, Text, StyleSheet, Image, Button, Alert, ImageBackground, Touchabl
 import { TextInput } from 'react-native-gesture-handler'
 import ApiConsumer from '../consumer/api-consumer'
 
-class Register extends Component {
+class Income extends Component {
 
   constructor(props) {
     super(props);
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default Register;
+export default Income;

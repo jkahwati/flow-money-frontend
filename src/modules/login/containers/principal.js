@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ApiConsumer from '../consumer/api-consumer'
 import {
   StyleSheet,
   Text,
@@ -17,27 +18,57 @@ export default class Principal extends Component {
     super(props);
     this.state = {
       data: [
-        {id:1, title: "Option 1", image:"https://img.icons8.com/color/70/000000/cottage.png"},
-        {id:1, title: "Option 2", image:"https://img.icons8.com/color/70/000000/administrator-male.png"},
-        {id:2, title: "Option 3", image:"https://img.icons8.com/color/70/000000/filled-like.png"} ,
-        {id:3, title: "Option 4", image:"https://img.icons8.com/color/70/000000/facebook-like.png"} ,
-        {id:4, title: "Option 5", image:"https://img.icons8.com/color/70/000000/shutdown.png"} ,
-        {id:5, title: "Option 6", image:"https://img.icons8.com/color/70/000000/traffic-jam.png"} ,
-        {id:6, title: "Option 7", image:"https://img.icons8.com/dusk/70/000000/visual-game-boy.png"} ,
-        {id:8, title: "Option 8", image:"https://img.icons8.com/flat_round/70/000000/cow.png"} ,
-        {id:9, title: "Option 9", image:"https://img.icons8.com/color/70/000000/coworking.png"} ,
-        {id:9, title: "Option 10",image:"https://img.icons8.com/nolan/70/000000/job.png"} ,
-      ]
+        {id:1, title: "Option 1", image:"https://img.icons8.com/nolan/50/coin-in-hand.png"},
+        {id:2, title: "Option 2", image:"https://img.icons8.com/nolan/50/donate.png"},
+        {id:3, title: "Option 3", image:"https://img.icons8.com/nolan/50/remittance-slip.png"} ,
+        {id:4, title: "Option 4", image:"https://img.icons8.com/nolan/50/profit.png"} ,
+        {id:5, title: "Option 5", image:"https://img.icons8.com/nolan/50/shutdown.png"} ,
+        {id:6, title: "Option 6", image:"https://img.icons8.com/nolan/50/currency-settings.png"} ,
+      ],
+      isLoading: true,
     };
   }
 
-  clickEventListener(item) {
-    Alert.Alert(item.title)
+  async componentDidMount() {
+    console.log('Se consulta el monto total...')
+    const username = this.props.navigation.state.params.user
+    var apiConsumer = new ApiConsumer();
+    const response = await apiConsumer.getBalance(username)
+    this.setState({balance: response.accounts[0].balance})
+    // fetch('https://reactnative.dev/movies.json')
+    //   .then((response) => response.json())
+    //   .then((json) => {
+    //     console.log(json)
+    //     this.setState({ movies: json.movies });
+    //   })
+    //   .catch((error) => console.error(error))
+    //   .finally(() => {
+    //     this.setState({ isLoading: false });
+    //   });
   }
+
+  clickEventListener(item) {
+    if (item.id === 1) this.props.navigation.navigate('Income')
+    else Alert.alert("Not available yet")
+  }
+
+  goToIncome() {
+    this.props.navigation.navigate('Not available yet')
+  }
+
+  // getBalance = async ()  => {
+
+  // }
 
   render() {
     return (
       <ImageBackground source= {require('../../../../assets/images/background.jpg')} style={styles.container}>  
+      <View>
+        <Text style={{textAlign: 'center'}} >Your balance</Text>
+      </View>
+      <View>
+        <Text style={{fontSize: 60, textAlign: 'center'}}>{this.state.balance}</Text>
+      </View>
         <FlatList style={styles.list}
           contentContainerStyle={styles.listContainer}
           data={this.state.data}
@@ -48,12 +79,12 @@ export default class Principal extends Component {
           }}
           renderItem={({item}) => {
             return (
-              <TouchableOpacity style={styles.card} onPress={() => {this.clickEventListener(item.view)}}>
+              <TouchableOpacity style={styles.card} onPress={() => {this.clickEventListener(item)}}>
                 <View style={styles.cardFooter}></View>
                 <Image style={styles.cardImage} source={{uri:item.image}}/>
                 <View style={styles.cardHeader}>
                   <View style={{alignItems:"center", justifyContent:"center"}}>
-                    <Text style={styles.title}>{item.title}</Text>
+                    {/* <Text style={styles.title}>{item.title}</Text> */}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -113,6 +144,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 12.5,
     paddingBottom: 25,
+    paddingHorizontal: 16,
+    borderBottomLeftRadius: 1,
+    borderBottomRightRadius: 1,
+  },
+  balance:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 12.5,
+    paddingBottom: 100,
     paddingHorizontal: 16,
     borderBottomLeftRadius: 1,
     borderBottomRightRadius: 1,
